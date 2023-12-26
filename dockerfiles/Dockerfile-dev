@@ -1,0 +1,23 @@
+FROM python:3.11
+
+ENV PYTHONUNBUFFERED 1
+
+RUN mkdir -p /opt/app
+WORKDIR /opt/app
+
+COPY requirements.txt /opt/app/
+
+RUN pip install --upgrade pip && pip install -r requirements.txt --no-cache-dir
+
+COPY . /opt/app/
+
+RUN useradd -ms /bin/bash bank-api
+RUN chown -R bank-api:bank-api /opt/app
+
+ADD scripts/docker-entrypoint-dev.sh /home/bank-api/docker-entrypoint-dev.sh
+ADD scripts/check_service.py /home/bank-api/check_service.py
+
+RUN chmod +x /home/bank-api/docker-entrypoint-dev.sh
+USER bank-api
+
+ENTRYPOINT ["/home/bank-api/docker-entrypoint-dev.sh"]
