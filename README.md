@@ -44,11 +44,11 @@ Build images and start containers. Migration command will be run during startup.
 #### Working with running container
 * When container is running
 ```bash
-  docker-compose exec sales-api <your_command>
+  docker-compose exec bank-api <your_command>
 ```
 * Without running container
 ```bash
-  docker-compose run --rm sales-api <your_command>
+  docker-compose run --rm bank-api <your_command>
 ```
 
 ### Installation pre-commit
