@@ -1,0 +1,9 @@
+Django==4.2
+djangorestframework==3.14.0
+drf-spectacular==0.26.4
+factory-boy==3.3.0
+gunicorn==21.2.0
+pre-commit==3.3.3
+psycopg2-binary==2.9.7
+PyJWT==2.8.0
+requests==2.31.0
