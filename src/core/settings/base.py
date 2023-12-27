@@ -147,7 +147,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.BrowsableAPIRenderer",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "utils.permissions.IsAuthenticated",
+        "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
@@ -160,7 +160,6 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Sales API",
     "DESCRIPTION": "API for Mobile Bank System",
     "VERSION": "0.0.1",
-    "PREPROCESSING_HOOKS": ["core.spectacular.preprocessing_filter_spec"],
 }
 
 LOGGING = {
