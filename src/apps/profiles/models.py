@@ -1,18 +1,20 @@
-from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
+
+from apps.base.models import BaseModel
 
 
-class Profile(models.Model):
+class Profile(BaseModel):
     """
     User profile model
     """
-    user_id = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
     birth_date = models.DateField()
     address = models.TextField()
-    mobile_number = models.IntegerField()
+    mobile_number = models.CharField(max_length=64)
 
     def __str__(self):
-        return 'f{self.name}, {self.last_name}, {self.email}, {self.birth_date}, {self.address}, {self.mobile_number}'
+        return "f{self.first_name} {self.last_name}"
