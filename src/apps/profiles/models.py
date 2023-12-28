@@ -17,4 +17,4 @@ class Profile(BaseModel):
     mobile_number = models.CharField(max_length=64)
 
     def __str__(self):
-        return "f{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}"

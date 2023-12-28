@@ -39,6 +39,8 @@ MY_APPS = [
     "apps.base",
     "apps.users",
     "apps.profiles",
+    "apps.account",
+    "apps.cards",
 ]
 
 INSTALLED_APPS = (
