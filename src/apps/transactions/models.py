@@ -32,4 +32,4 @@ class Transaction(BaseModel):
     type = models.CharField(choices=TransactionTypeChoice.choices)
 
     def __str__(self):
-        return self.id
+        return f"{self.id}"
