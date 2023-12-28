@@ -37,6 +37,7 @@ THIRD_PARTY_APPS = [
 
 MY_APPS = [
     "apps.base",
+    "apps.users",
     "apps.profiles",
 ]
 
@@ -187,3 +188,5 @@ LOGGING = {
         }
     },
 }
+
+AUTH_USER_MODEL = "users.User"
