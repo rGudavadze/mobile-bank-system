@@ -19,3 +19,6 @@ class Card(BaseModel):
     expiration_date = models.DateField()
     cvc = models.IntegerField(max_length=3)
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.card_number
