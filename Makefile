@@ -7,7 +7,7 @@ install_requirements:
 
 run_makemigrations:
 	@echo "Making Migration files"
-	python manage.py makemigrations --settings=$(SETTINGS_DEV)
+	python src/manage.py makemigrations --settings=$(SETTINGS_DEV)
 
 run_migrations:
 	@echo "Running Migrations Docker"
