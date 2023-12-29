@@ -17,7 +17,7 @@ class Card(BaseModel):
     card_type = models.CharField(choices=CardTypeChoice.choices)
     card_number = models.CharField(max_length=255)
     expiration_date = models.DateField()
-    cvc = models.IntegerField(max_length=3)
+    cvc = models.IntegerField()
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
