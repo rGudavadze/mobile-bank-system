@@ -24,3 +24,7 @@ class AuthTokenSerializer(serializers.Serializer):
         if not user.is_active:
             raise serializers.ValidationError("Account is inactive.")
         return user
+
+
+class RefreshTokenSerializer(serializers.Serializer):
+    refresh_token = serializers.CharField()
