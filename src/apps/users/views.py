@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 import jwt
 from django.conf import settings
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -20,7 +21,7 @@ class UserRegisterAPI(APIView):
     """
 
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -76,6 +77,10 @@ class TokenRefreshView(APIView):
                     refresh_token, settings.SECRET_KEY, algorithms=["HS256"]
                 )
                 user_id = payload["user_id"]
+
+                if user_id is None:
+                    raise AuthenticationFailed("User identifier not found in JWT")
+
                 new_access_token = jwt.encode(
                     {"user_id": user_id, "exp": datetime.now() + timedelta(minutes=5)},
                     settings.SECRET_KEY,
