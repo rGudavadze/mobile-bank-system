@@ -22,7 +22,7 @@ class AuthTokenSerializer(serializers.Serializer):
         if not user:
             raise serializers.ValidationError("Unable to log in.")
         if not user.is_active:
-            raise serializers.ValidationError("Account is inactive.")
+            raise serializers.ValidationError("User is inactive or deleted.")
         return user
 
 
