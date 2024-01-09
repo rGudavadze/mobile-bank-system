@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
 
@@ -28,3 +29,29 @@ class AuthTokenSerializer(serializers.Serializer):
 
 class RefreshTokenSerializer(serializers.Serializer):
     refresh_token = serializers.CharField()
+
+
+class PasswordForgetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    reset_token = serializers.CharField()
+    new_password = serializers.CharField(
+        style={
+            "input_type": "password",
+        },
+        write_only=True,
+    )
+    new_password2 = serializers.CharField(
+        style={
+            "input_type": "password",
+        },
+        write_only=True,
+    )
+
+    def validate(self, data):
+        if data["new_password"] != data["new_password2"]:
+            raise serializers.ValidationError("Passwords do not match")
+        validate_password(data["new_password"])
+        return data
