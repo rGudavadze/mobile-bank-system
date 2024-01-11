@@ -1,3 +1,8 @@
+"""
+Module implements the JWTAuthentication class which extends Django's
+TokenAuthentication to use JSON Web Tokens (JWT) for user authentication.
+It is designed to integrate with Django REST Framework's authentication mechanism.
+"""
 import jwt
 from django.contrib.auth import get_user_model
 from rest_framework import exceptions
@@ -7,8 +12,15 @@ from apps.users.jwt_utils import decode_refresh_token
 
 
 class JWTAuthentication(TokenAuthentication):
+    """
+    Extends Django's TokenAuthentication to authenticate users by decoding and verifying JWTs.
+    """
+
     def authenticate(self, request):
-        # Extract the JWT from the Authorization header
+        """
+        Extracts and decodes the JWT from the request, and
+        authenticates the user based on the token's payload.
+        """
         jwt_token = request.META.get("HTTP_AUTHORIZATION")
         print(jwt_token)
         if jwt_token is None:
