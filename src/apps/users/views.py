@@ -104,10 +104,7 @@ class PasswordForgetView(APIView):
         reset_token = generate_access_token(user.id)
 
         # Generate password forget url
-        password_forget_url = (
-            request.build_absolute_uri(reverse("password-forget"))
-            + f"?token={reset_token}"
-        )
+        password_forget_url = f'{request.build_absolute_uri(reverse("password-forget"))}?token={reset_token}'
 
         # Send password reset email
         send_password_reset_email(user, password_forget_url)
