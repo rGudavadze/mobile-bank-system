@@ -1,3 +1,7 @@
+"""
+Module provides utility functions for token management and email services for user authentication
+and password management.
+"""
 import jwt
 from django.conf import settings
 from django.core.mail import send_mail
@@ -8,7 +12,7 @@ from apps.users.jwt_utils import decode_refresh_token, generate_access_token
 
 def update_access_token(refresh_token):
     """
-    Updates access token by decoding JWT refresh token.
+    Validates the refresh token, extracts the user ID, and generates a new access token.
     """
     try:
         payload = decode_refresh_token(refresh_token)
