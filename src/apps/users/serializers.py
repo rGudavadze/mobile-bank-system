@@ -43,7 +43,7 @@ class PasswordResetSerializer(serializers.Serializer):
         },
         write_only=True,
     )
-    new_password2 = serializers.CharField(
+    new_password_confirm = serializers.CharField(
         style={
             "input_type": "password",
         },
@@ -51,7 +51,7 @@ class PasswordResetSerializer(serializers.Serializer):
     )
 
     def validate(self, data):
-        if data["new_password"] != data["new_password2"]:
+        if data["new_password"] != data["new_password_confirm"]:
             raise serializers.ValidationError("Passwords do not match")
         validate_password(data["new_password"])
         return data
