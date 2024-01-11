@@ -1,7 +1,7 @@
 """Serializers for the transactions model."""
 from rest_framework import serializers
 
-from src.apps.transactions.models import Transaction
+from apps.transactions.models import Transaction
 
 
 class TransactionSerializer(serializers.ModelSerializer):
