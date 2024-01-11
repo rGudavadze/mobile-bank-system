@@ -39,7 +39,6 @@ class JWTAuthentication(TokenAuthentication):
             raise exceptions.AuthenticationFailed("User identifier not found in JWT")
 
         user = get_user_model().objects.get(id=user_id)
-        print(user)
         if user is None:
             raise exceptions.AuthenticationFailed("User not found")
 
