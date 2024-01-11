@@ -22,7 +22,6 @@ class JWTAuthentication(TokenAuthentication):
         authenticates the user based on the token's payload.
         """
         jwt_token = request.META.get("HTTP_AUTHORIZATION")
-        print(jwt_token)
         if jwt_token is None:
             return None
 
@@ -39,7 +38,8 @@ class JWTAuthentication(TokenAuthentication):
         if user_id is None:
             raise exceptions.AuthenticationFailed("User identifier not found in JWT")
 
-        user = get_user_model().objects.filter(id=user_id).first()
+        user = get_user_model().objects.get(id=user_id)
+        print(user)
         if user is None:
             raise exceptions.AuthenticationFailed("User not found")
 
