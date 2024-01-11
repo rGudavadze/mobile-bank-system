@@ -3,7 +3,7 @@ from apps.transactions.views import CreateTransactionView, RetrieveTransactionVi
 
 urlpatterns = [
     path('transactions/', CreateTransactionView.as_view(), name='create_transaction',),
-    path('transactions/<uuid:id>', RetrieveTransactionView.as_view(), name='retrive_transaction', ),
+    path('transactions/<uuid:id>', RetrieveTransactionView.as_view(), name='get_transaction', ),
     path('transactions/', ListTransactionView.as_view(), name='list_transaction', ),
 
 ]
