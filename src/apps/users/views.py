@@ -75,9 +75,10 @@ class TokenRefreshView(APIView):
 
         try:
             access_token = update_access_token(serializer.data.get("refresh_token"))
-            return Response({"access_token": access_token}, status=status.HTTP_200_OK)
         except AuthenticationFailed as e:
             return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"access_token": access_token}, status=status.HTTP_201_CREATED)
 
 
 class PasswordForgetView(APIView):
@@ -138,10 +139,6 @@ class PasswordResetView(APIView):
             user = get_user_model().objects.get(id=user_id)
             user.set_password(new_password)
             user.save()
-            return Response(
-                {"message": "Password has been reset successfully."},
-                status=status.HTTP_201_CREATED,
-            )
 
         except jwt.ExpiredSignatureError:
             return Response(
@@ -153,3 +150,8 @@ class PasswordResetView(APIView):
                 {"error": "Invalid token or user does not exist."},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
+
+        return Response(
+            {"message": "Password has been reset successfully."},
+            status=status.HTTP_201_CREATED,
+        )
