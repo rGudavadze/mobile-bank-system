@@ -1,3 +1,6 @@
+"""
+Module implements API endpoints for user management.
+"""
 import jwt
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -94,7 +97,7 @@ class PasswordForgetView(APIView):
         except get_user_model().DoesNotExist:
             return Response(
                 {"error": "User with this email does not exist"},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         reset_token = generate_access_token(user.id)
@@ -137,16 +140,16 @@ class PasswordResetView(APIView):
             user.save()
             return Response(
                 {"message": "Password has been reset successfully."},
-                status=status.HTTP_200_OK,
+                status=status.HTTP_201_CREATED,
             )
 
         except jwt.ExpiredSignatureError:
             return Response(
                 {"error": "Reset token has expired."},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
         except (jwt.InvalidTokenError, get_user_model().DoesNotExist):
             return Response(
                 {"error": "Invalid token or user does not exist."},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
