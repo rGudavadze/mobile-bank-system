@@ -10,11 +10,11 @@ from apps.users.views import (
 
 urlpatterns = [
     # Endpoint for user registration
-    path("user/register/", views.UserRegisterAPI.as_view(), name="user-register"),
+    path("register/", views.UserRegisterAPI.as_view(), name="user-register"),
     # Endpoints for JWT token management
-    path("token/", TokenObtainView.as_view(), name="token-obtain"),
-    path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
+    path("login/", TokenObtainView.as_view(), name="token-obtain"),
+    path("token-refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     # Password management endpoints
-    path("user/password-forget/", PasswordForgetView.as_view(), name="password-forget"),
-    path("user/password-reset/", PasswordResetView.as_view(), name="password-reset"),
+    path("password-forget/", PasswordForgetView.as_view(), name="password-forget"),
+    path("password-reset/", PasswordResetView.as_view(), name="password-reset"),
 ]
