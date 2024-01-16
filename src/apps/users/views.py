@@ -26,7 +26,7 @@ from apps.users.serializers import (
 from apps.users.services import send_password_reset_email, update_access_token
 
 
-class UserRegisterAPI(APIView):
+class UserRegisterAPIView(APIView):
     """
     An endpoint to create a new user.
     """
@@ -41,7 +41,7 @@ class UserRegisterAPI(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class TokenObtainView(APIView):
+class UserLoginAPIView(APIView):
     """
     An endpoint to obtain JWT access and refresh tokens for a user.
     """
@@ -61,7 +61,7 @@ class TokenObtainView(APIView):
         )
 
 
-class TokenRefreshView(APIView):
+class TokenRefreshAPIView(APIView):
     """
     An endpoint to refresh JWT access tokens using a refresh token.
     """
@@ -81,7 +81,7 @@ class TokenRefreshView(APIView):
         return Response({"access_token": access_token}, status=status.HTTP_201_CREATED)
 
 
-class PasswordForgetView(APIView):
+class PasswordForgetAPIView(APIView):
     """
     An endpoint for user to send POST request to reset password.
     """
@@ -115,7 +115,7 @@ class PasswordForgetView(APIView):
         )
 
 
-class PasswordResetView(APIView):
+class PasswordResetAPIView(APIView):
     """
     An endpoint for user to send PATCH request to make new password.
     """
@@ -129,6 +129,7 @@ class PasswordResetView(APIView):
         new_password = serializer.validated_data["new_password"]
         try:
             payload = decode_refresh_token(reset_token)
+            print(payload)
             user_id = payload.get("user_id")
             if user_id is None:
                 raise InvalidTokenError("Invalid token")
