@@ -1,10 +1,6 @@
 """Views for the transactions app."""
 from rest_framework import permissions
-from rest_framework.generics import (
-    ListCreateAPIView,
-    RetrieveAPIView,
-    get_object_or_404,
-)
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 
 from apps.transactions.models import Transaction
 from apps.transactions.serializers import TransactionSerializer
@@ -19,18 +15,14 @@ class CreateTransactionView(ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Transaction.objects.filter(sender__profile__user=user)
+        return Transaction.objects.filter(sender__profile__user=user).select_related(
+            "sender__profile__user"
+        )
 
 
 class RetrieveTransactionView(RetrieveAPIView):
     """Retrieve a transaction."""
 
+    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
     permission_classes = (permissions.IsAuthenticated,)
-
-    def get_queryset(self):
-        return Transaction.objects.all()  # You can adjust this if needed
-
-    def get_object(self):
-        transaction_id = self.kwargs.get("id")
-        return get_object_or_404(Transaction, id=transaction_id)
