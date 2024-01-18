@@ -7,12 +7,12 @@ from apps.transactions.views import (
 
 urlpatterns = [
     path(
-        "transactions/",
+        "/",
         CreateTransactionView.as_view(),
         name="list_create_transaction",
     ),
     path(
-        "transactions/<uuid:id>",
+        "/<uuid:id>",
         RetrieveTransactionView.as_view(),
         name="get_transaction",
     ),
