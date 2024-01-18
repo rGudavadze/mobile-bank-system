@@ -1,15 +1,19 @@
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from utils.permissions import IsCardOwner
 
 from apps.cards.models import Account, Card
 from apps.cards.serializers import CardSerializer
+from utils.permissions import IsCardOwner
+
+from .filters import CardFilter
 
 
 class CardListView(generics.ListCreateAPIView):
+    queryset = Card.objects.all()
     serializer_class = CardSerializer
     permission_classes = [IsAuthenticated, IsCardOwner]
+    filterset_class = CardFilter
 
     def get_queryset(self):
         account_id = self.request.GET.get("account")
