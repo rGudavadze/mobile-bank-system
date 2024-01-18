@@ -15,9 +15,9 @@ class UserRegisterTestCase(APITestCase):
         self.url = reverse("user-register")
         self.body = {"email": "unique_email@gmail.com", "password": "password"}
 
-    def test_register_correct(self):
+    def test_successful_registration(self):
         """
-        Test that creating a user is successful.
+        Test successful user registration with valid data.
         """
 
         response = self.client.post(
@@ -33,7 +33,7 @@ class UserRegisterTestCase(APITestCase):
 
     def test_register_existing_email(self):
         """
-        Test that checking if the email already exists.
+        Test user registration with an email that already exists.
         """
         self.body.update(email="userexists@gmail.com")
         response = self.client.post(
@@ -47,7 +47,7 @@ class UserRegisterTestCase(APITestCase):
 
     def test_register_invalid_email(self):
         """
-        Test that checking if the email is valid.
+        Test user registration with invalid email format.
         """
         self.body.update(email="email")
         response = self.client.post(
@@ -57,3 +57,11 @@ class UserRegisterTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         self.assertEqual(response.data.get("email")[0], "Enter a valid email address.")
+
+    def test_access_without_authentication(self):
+        """
+        Test that the endpoint is accessed without authentication.
+        """
+        self.client.logout()
+        response = self.client.post(self.url, self.body)
+        self.assertNotEqual(response.status_code, status.HTTP_403_FORBIDDEN)
