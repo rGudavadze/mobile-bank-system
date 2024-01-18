@@ -25,7 +25,6 @@ class UserRegisterTestCase(APITestCase):
             self.body,
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        # Asserting that the response data contains the correct email
         self.assertEqual(response.data.get("email"), "unique_email@gmail.com")
 
         # Check if user actually created in database
@@ -42,7 +41,19 @@ class UserRegisterTestCase(APITestCase):
             data=self.body,
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        # Asserting that the first error message is the expected error message
         self.assertEqual(
             response.data.get("email")[0], "user with this email already exists."
         )
+
+    def test_register_invalid_email(self):
+        """
+        Test that checking if the email is valid.
+        """
+        self.body.update(email="email")
+        response = self.client.post(
+            self.url,
+            data=self.body,
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        self.assertEqual(response.data.get("email")[0], "Enter a valid email address.")
