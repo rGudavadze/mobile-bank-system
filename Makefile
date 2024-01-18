@@ -27,4 +27,4 @@ install_pre_commit: install_requirements
 
 run_tests:
 	@echo "running tests docker"
-	docker-compose run --rm api python src/manage.py test
+	docker compose run --rm api sh -c "cd src && python manage.py test"
