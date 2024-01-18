@@ -19,14 +19,12 @@ class UserRegisterTestCase(APITestCase):
         """
         Test successful user registration with valid data.
         """
-
         response = self.client.post(
             self.url,
             self.body,
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data.get("email"), "unique_email@gmail.com")
-
         # Check if user actually created in database
         user = get_user_model()
         self.assertTrue(user.objects.filter(email=self.body.get("email")).exists())
@@ -55,7 +53,6 @@ class UserRegisterTestCase(APITestCase):
             data=self.body,
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
         self.assertEqual(response.data.get("email")[0], "Enter a valid email address.")
 
     def test_access_without_authentication(self):
