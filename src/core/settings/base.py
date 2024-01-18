@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 THIRD_PARTY_APPS = [
     "rest_framework",
     "drf_spectacular",
+    "django_filters",
 ]
 
 MY_APPS = [
@@ -158,6 +159,7 @@ REST_FRAMEWORK = {
         "core.jwt_authentication.JWTAuthentication",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
