@@ -13,7 +13,7 @@ class UserRegisterTestCase(APITestCase):
     def setUp(self):
         self.user = UserFactory.create(email="userexists@gmail.com")
         self.url = reverse("user-register")
-        self.body = {"email": "unique_email@gmail.com", "password": "password"}
+        self.body = dict(email="unique_email@gmail.com", password="password")
 
     def test_successful_registration(self):
         """
@@ -25,6 +25,7 @@ class UserRegisterTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data.get("email"), "unique_email@gmail.com")
+
         # Check if user actually created in database
         user = get_user_model()
         self.assertTrue(user.objects.filter(email=self.body.get("email")).exists())
