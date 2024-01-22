@@ -17,11 +17,11 @@ from apps.users.jwt_utils import (
     generate_refresh_token,
 )
 from apps.users.serializers import (
-    AuthTokenSerializer,
     PasswordForgetSerializer,
     PasswordResetSerializer,
     RefreshTokenSerializer,
-    UserSerializer,
+    UserLoginSerializer,
+    UserRegisterSerializer,
 )
 from apps.users.services import send_password_reset_email, update_access_token
 
@@ -31,7 +31,7 @@ class UserRegisterAPIView(APIView):
     An endpoint to create a new user.
     """
 
-    serializer_class = UserSerializer
+    serializer_class = UserRegisterSerializer
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -46,7 +46,7 @@ class UserLoginAPIView(APIView):
     An endpoint to obtain JWT access and refresh tokens for a user.
     """
 
-    serializer_class = AuthTokenSerializer
+    serializer_class = UserLoginSerializer
     permission_classes = [AllowAny]
 
     def post(self, request):
