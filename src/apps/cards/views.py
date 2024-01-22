@@ -19,9 +19,13 @@ class CardListView(generics.ListCreateAPIView):
         account_id = self.request.GET.get("account")
 
         if account_id is not None:
-            queryset = Card.objects.filter(account__id=account_id)
+            queryset = Card.objects.select_related("account").filter(
+                account__id=account_id
+            )
         else:
-            queryset = Card.objects.filter(account__profile__user=self.request.user)
+            queryset = Card.objects.select_related("account__profile__user").filter(
+                account__profile__user=self.request.user
+            )
 
         return queryset
 
