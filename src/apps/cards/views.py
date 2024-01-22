@@ -4,24 +4,22 @@ from rest_framework.response import Response
 
 from apps.cards.models import Account, Card
 from apps.cards.serializers import CardSerializer
-from utils.permissions import IsCardOwner
+from utils.permissions import IsCardDetailOwner, IsCardListOwner
 
 from .filters import CardFilter
 
 
 class CardListView(generics.ListCreateAPIView):
+    permission_classes = [IsCardListOwner]
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    permission_classes = [IsAuthenticated, IsCardOwner]
     filterset_class = CardFilter
 
     def get_queryset(self):
         account_id = self.request.GET.get("account")
 
-        if account_id is not None:
-            queryset = Card.objects.select_related("account").filter(
-                account__id=account_id
-            )
+        if account_id:
+            queryset = Card.objects.select_related("account").filter(account=account_id)
         else:
             queryset = Card.objects.select_related("account__profile__user").filter(
                 account__profile__user=self.request.user
@@ -43,4 +41,4 @@ class CardListView(generics.ListCreateAPIView):
 class CardDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    permission_classes = [IsAuthenticated, IsCardOwner]
+    permission_classes = [IsAuthenticated, IsCardDetailOwner]
