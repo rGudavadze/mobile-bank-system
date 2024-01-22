@@ -9,7 +9,6 @@ class AccountSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "created_at",
-            "profile",
             "account_number",
             "account_type",
             "balance",
