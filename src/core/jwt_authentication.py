@@ -32,6 +32,8 @@ class JWTAuthentication(TokenAuthentication):
             raise exceptions.AuthenticationFailed("Invalid signature")
         except jwt.exceptions.DecodeError:
             raise exceptions.AuthenticationFailed("Invalid token")
+        except jwt.exceptions.ExpiredSignatureError:
+            raise exceptions.AuthenticationFailed("Signature has expired")
 
         # Get the user from the database
         user_id = payload.get("user_id")
