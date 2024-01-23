@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework.serializers import ValidationError
 
 from apps.account.models import Account
+from apps.account.permissions import IsAccountOwner
 from apps.account.serializers import AccountSerializer
 from apps.profiles.models import Profile
 
@@ -27,3 +28,4 @@ class AccountList(generics.ListCreateAPIView):
 class AccountDetail(generics.RetrieveDestroyAPIView):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
+    permission_classes = [IsAccountOwner]
