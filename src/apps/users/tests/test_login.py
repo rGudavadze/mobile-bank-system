@@ -1,19 +1,18 @@
 """
 Tests for the user login endpoint.
 """
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from apps.users.factories import UserFactory
+
 
 class UserLoginTestCase(APITestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            email="email@gmail.com", password="password"
-        )
+        self.user = UserFactory()
         self.url = reverse("user-login")
-        self.body = dict(email="email@gmail.com", password="password")
+        self.body = dict(email=self.user.email, password="password")
 
     def test_login_successful(self):
         """
