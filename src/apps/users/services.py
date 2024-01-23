@@ -18,7 +18,7 @@ def update_access_token(refresh_token):
         payload = decode_refresh_token(refresh_token)
         user_id = payload.get("user_id")
 
-        if user_id is None:
+        if not user_id:
             raise AuthenticationFailed("User identifier not found in JWT")
 
         access_token = generate_access_token(user_id)

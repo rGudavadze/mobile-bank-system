@@ -131,7 +131,7 @@ class PasswordResetAPIView(APIView):
             payload = decode_refresh_token(reset_token)
             print(payload)
             user_id = payload.get("user_id")
-            if user_id is None:
+            if not user_id:
                 raise InvalidTokenError("Invalid token")
 
             user = get_user_model().objects.get(id=user_id)
