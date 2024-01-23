@@ -15,7 +15,7 @@ class AccountList(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
 
-        return Account.objects.filter(profile__user=user)
+        return Account.objects.select_related("profile").filter(profile__user=user)
 
     def perform_create(self, serializer):
         try:
