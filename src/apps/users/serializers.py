@@ -27,7 +27,7 @@ class UserLoginSerializer(serializers.Serializer):
         return user
 
 
-class RefreshTokenSerializer(serializers.Serializer):
+class UpdateTokenSerializer(serializers.Serializer):
     refresh_token = serializers.CharField()
 
 

@@ -19,7 +19,7 @@ from apps.users.jwt_utils import (
 from apps.users.serializers import (
     PasswordForgetSerializer,
     PasswordResetSerializer,
-    RefreshTokenSerializer,
+    UpdateTokenSerializer,
     UserLoginSerializer,
     UserRegisterSerializer,
 )
@@ -61,12 +61,12 @@ class UserLoginAPIView(APIView):
         )
 
 
-class TokenRefreshAPIView(APIView):
+class TokenUpdateAPIView(APIView):
     """
-    An endpoint to refresh JWT access tokens using a refresh token.
+    An endpoint to update JWT access tokens using a refresh token.
     """
 
-    serializer_class = RefreshTokenSerializer
+    serializer_class = UpdateTokenSerializer
     permission_classes = [AllowAny]
 
     def post(self, request):
