@@ -14,17 +14,9 @@ class CardListView(generics.ListCreateAPIView):
     filterset_class = CardFilter
 
     def get_queryset(self):
-        account_id = self.request.GET.get("account")
-
-        if account_id:
-            queryset = Card.objects.select_related("account").filter(
-                account__profile__user=self.request.user, account=account_id
-            )
-        else:
-            queryset = Card.objects.select_related("account__profile__user").filter(
-                account__profile__user=self.request.user
-            )
-
+        queryset = self.queryset.select_related("account__profile__user").filter(
+            account__profile__user=self.request.user
+        )
         return queryset
 
     def create(self, request, *args, **kwargs):
