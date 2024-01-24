@@ -1,16 +1,14 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.cards.models import Account, Card
 from apps.cards.serializers import CardSerializer
-from utils.permissions import IsCardDetailOwner, IsCardListOwner
 
 from .filters import CardFilter
 
 
 class CardListView(generics.ListCreateAPIView):
-    permission_classes = [IsCardListOwner]
     queryset = Card.objects.all()
     serializer_class = CardSerializer
     filterset_class = CardFilter
@@ -19,7 +17,9 @@ class CardListView(generics.ListCreateAPIView):
         account_id = self.request.GET.get("account")
 
         if account_id:
-            queryset = Card.objects.select_related("account").filter(account=account_id)
+            queryset = Card.objects.select_related("account").filter(
+                account__profile__user=self.request.user, account=account_id
+            )
         else:
             queryset = Card.objects.select_related("account__profile__user").filter(
                 account__profile__user=self.request.user
@@ -39,6 +39,12 @@ class CardListView(generics.ListCreateAPIView):
 
 
 class CardDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Card.objects.all()
     serializer_class = CardSerializer
-    permission_classes = [IsAuthenticated, IsCardDetailOwner]
+
+    def get_object(self):
+        return get_object_or_404(
+            Card.objects.filter(
+                account__profile__user=self.request.user,
+            ),
+            pk=self.kwargs.get("pk"),
+        )
