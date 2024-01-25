@@ -14,14 +14,14 @@ class UserLoginTestCase(APITestCase):
         self.url = reverse("user-login")
         self.body = dict(email=self.user.email, password="password")
 
-    def test_login_successful(self):
+    def test_login_success(self):
         """
         Test successful login.
         """
         response = self.client.post(self.url, self.body)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_login_incorrect_email(self):
+    def test_login_with_incorrect_email(self):
         """
         Test login with incorrect email address.
         """
