@@ -1,4 +1,4 @@
-from rest_framework import filters
+from django_filters import rest_framework as filters
 
 from apps.cards.models import Card
 
