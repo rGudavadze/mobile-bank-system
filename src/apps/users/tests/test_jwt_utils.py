@@ -6,10 +6,15 @@ from unittest.mock import patch
 
 import jwt
 from django.conf import settings
+from jwt import ExpiredSignatureError, InvalidTokenError
 from rest_framework.test import APITestCase
 
 from apps.users.factories import UserFactory
-from apps.users.jwt_utils import generate_access_token, generate_refresh_token
+from apps.users.jwt_utils import (
+    decode_refresh_token,
+    generate_access_token,
+    generate_refresh_token,
+)
 
 
 class JWTUtilsTestCase(APITestCase):
@@ -56,3 +61,52 @@ class JWTUtilsTestCase(APITestCase):
             refresh_token_payload, settings.SECRET_KEY, algorithm="HS256"
         )
         self.assertEqual(refresh_token, "mocked_refresh_token")
+
+    @patch("apps.users.jwt_utils.jwt.decode")
+    @patch("apps.users.jwt_utils.datetime")
+    def test_decode_refresh_token_success(self, mock_datetime, mock_jwt_decode):
+        """
+        Test the JWT refresh token decode method.
+        """
+
+        exp = mock_datetime.timestamp.return_value = self.fixed_now + timedelta(days=30)
+        mock_payload = {"user_id": str(self.user.id), "exp": exp}
+
+        mock_jwt_decode.return_value = mock_payload
+
+        decoded_payload = decode_refresh_token("mocked_refresh_token")
+
+        mock_jwt_decode.assert_called_once_with(
+            "mocked_refresh_token", settings.SECRET_KEY, algorithms=["HS256"]
+        )
+        self.assertEqual(decoded_payload, mock_payload)
+
+    @patch("apps.users.jwt_utils.jwt.decode")
+    def test_decode_refresh_token_expired(self, mock_jwt_decode):
+        """
+        Test the expired JWT refresh token method.
+        """
+
+        mock_jwt_decode.side_effect = ExpiredSignatureError("Token is expired")
+
+        with self.assertRaises(ExpiredSignatureError):
+            decode_refresh_token("mocked_refresh_token")
+
+        mock_jwt_decode.assert_called_once_with(
+            "mocked_refresh_token", settings.SECRET_KEY, algorithms=["HS256"]
+        )
+
+    @patch("apps.users.jwt_utils.jwt.decode")
+    def test_decode_refresh_token_invalid(self, mock_jwt_decode):
+        """
+        Test the invalid JWT refresh token method.
+        """
+
+        mock_jwt_decode.side_effect = InvalidTokenError("Invalid token")
+
+        with self.assertRaises(InvalidTokenError):
+            decode_refresh_token("mocked_refresh_token")
+
+        mock_jwt_decode.assert_called_once_with(
+            "mocked_refresh_token", settings.SECRET_KEY, algorithms=["HS256"]
+        )
