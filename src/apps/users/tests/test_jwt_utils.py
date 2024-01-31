@@ -43,6 +43,24 @@ class JWTUtilsTestCase(APITestCase):
         )
         self.assertEqual(access_token, "mocked_access_token")
 
+    def test_generate_and_decode_access_token_success(self):
+        """
+        Integration test for generating and decoding a JWT access token
+        to ensure the token contains the correct payload and is valid.
+        """
+
+        access_token = generate_access_token(self.user.id)
+        payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=["HS256"])
+
+        # Verify the payload contents
+        self.assertEqual(payload["user_id"], str(self.user.id))
+
+        # Verify the expiration time is approximately 60 minutes from now
+        exp = datetime.fromtimestamp(payload["exp"])
+        self.assertTrue(
+            timedelta(minutes=59) < exp - datetime.now() < timedelta(minutes=61)
+        )
+
     @patch("apps.users.jwt_utils.jwt.encode")
     @patch("apps.users.jwt_utils.datetime")
     def test_generate_refresh_token_success(self, mock_datetime, mock_jwt_encode):
@@ -61,6 +79,22 @@ class JWTUtilsTestCase(APITestCase):
             refresh_token_payload, settings.SECRET_KEY, algorithm="HS256"
         )
         self.assertEqual(refresh_token, "mocked_refresh_token")
+
+    def test_generate_and_decode_refresh_token_success(self):
+        """
+        Integration test for generating and decoding a JWT refresh token
+        to ensure the token contains the correct payload and is valid.
+        """
+
+        refresh_token = generate_refresh_token(self.user.id)
+        payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=["HS256"])
+
+        # Verify the payload contents
+        self.assertEqual(payload["user_id"], str(self.user.id))
+
+        # Verify the expiration time is approximately 30 days from now
+        exp = datetime.fromtimestamp(payload["exp"])
+        self.assertTrue(timedelta(days=29) < exp - datetime.now() < timedelta(days=31))
 
     @patch("apps.users.jwt_utils.jwt.decode")
     @patch("apps.users.jwt_utils.datetime")
