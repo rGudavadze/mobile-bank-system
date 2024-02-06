@@ -25,18 +25,19 @@ class PasswordForgetTestCase(APITestCase):
         """
         Test password forget with incorrect email address.
         """
-        self.body.update(email="incorrect@gmail.com")
+        self.body.update(email="incorrect@example.com")
         response = self.client.post(self.url, self.body)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(
             response.data.get("error"), "User with this email does not exist"
         )
 
-    def generate_access_token_successful(self):
-        pass
+    def test_password_forget_with_nonexistent_email(self):
+        """
+        Test password forget with nonexistent email address.
+        """
+        self.body.update(email="incorrect@example.com")
+        assert self.user.email != self.body["email"]
 
-    def password_forget_url_successful(self):
-        pass
-
-    def send_password_reset_email_successful(self):
-        pass
+        response = self.client.post(self.url, self.body)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
