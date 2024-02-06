@@ -23,13 +23,13 @@ def update_access_token(refresh_token):
 
         access_token = generate_access_token(user_id)
 
-        return access_token
-
     except jwt.ExpiredSignatureError as e:
         raise AuthenticationFailed("Token has expired") from e
 
     except jwt.InvalidTokenError as e:
         raise AuthenticationFailed("Invalid token") from e
+
+    return access_token
 
 
 def send_password_reset_email(email, password_forget_url):
