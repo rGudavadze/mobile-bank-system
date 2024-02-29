@@ -17,11 +17,11 @@ from apps.users.jwt_utils import (
     generate_refresh_token,
 )
 from apps.users.serializers import (
-    AuthTokenSerializer,
     PasswordForgetSerializer,
     PasswordResetSerializer,
-    RefreshTokenSerializer,
-    UserSerializer,
+    UpdateTokenSerializer,
+    UserLoginSerializer,
+    UserRegisterSerializer,
 )
 from apps.users.services import send_password_reset_email, update_access_token
 
@@ -31,7 +31,7 @@ class UserRegisterAPIView(APIView):
     An endpoint to create a new user.
     """
 
-    serializer_class = UserSerializer
+    serializer_class = UserRegisterSerializer
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -46,7 +46,7 @@ class UserLoginAPIView(APIView):
     An endpoint to obtain JWT access and refresh tokens for a user.
     """
 
-    serializer_class = AuthTokenSerializer
+    serializer_class = UserLoginSerializer
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -61,12 +61,12 @@ class UserLoginAPIView(APIView):
         )
 
 
-class TokenRefreshAPIView(APIView):
+class TokenUpdateAPIView(APIView):
     """
-    An endpoint to refresh JWT access tokens using a refresh token.
+    An endpoint to update JWT access tokens using a refresh token.
     """
 
-    serializer_class = RefreshTokenSerializer
+    serializer_class = UpdateTokenSerializer
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -131,7 +131,7 @@ class PasswordResetAPIView(APIView):
             payload = decode_refresh_token(reset_token)
             print(payload)
             user_id = payload.get("user_id")
-            if user_id is None:
+            if not user_id:
                 raise InvalidTokenError("Invalid token")
 
             user = get_user_model().objects.get(id=user_id)

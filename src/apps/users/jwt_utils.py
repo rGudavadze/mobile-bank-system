@@ -16,7 +16,7 @@ def generate_access_token(user_id):
     """
     access_token_payload = {
         "user_id": str(user_id),
-        "exp": datetime.timestamp(datetime.now() + timedelta(minutes=5)),
+        "exp": datetime.timestamp(datetime.now() + timedelta(minutes=60)),
     }
     access_token = jwt.encode(
         access_token_payload, settings.SECRET_KEY, algorithm="HS256"
@@ -31,7 +31,7 @@ def generate_refresh_token(user_id):
     """
     refresh_token_payload = {
         "user_id": str(user_id),
-        "exp": datetime.timestamp(datetime.now() + timedelta(minutes=30)),
+        "exp": datetime.timestamp(datetime.now() + timedelta(days=30)),
     }
     refresh_token = jwt.encode(
         refresh_token_payload, settings.SECRET_KEY, algorithm="HS256"
